@@ -1,0 +1,22 @@
+2020-07-14 02:05:43 [INFO ] [StartupInfoLogger.java]logStarting(55) : Starting KakaoPayTempApplication on DESKTOP-07JMAPI with PID 20660 (C:\hTemp\workspace\kakaoPayTemp\target\classes started by H in C:\hTemp\workspace\kakaoPayTemp)
+2020-07-14 02:05:43 [INFO ] [SpringApplication.java]logStartupProfileInfo(651) : No active profile set, falling back to default profiles: default
+2020-07-14 02:05:43 [INFO ] [DeferredLog.java]logTo(225) : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-07-14 02:05:43 [INFO ] [DeferredLog.java]logTo(225) : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-07-14 02:05:43 [WARN ] [ClassPathMapperScanner.java]doScan(166) : No MyBatis mapper was found in '[com.kakaoPay.kakaoPayTemp.dao.*Mapper]' package. Please check your configuration.
+2020-07-14 02:05:43 [INFO ] [TomcatWebServer.java]initialize(108) : Tomcat initialized with port(s): 8080 (http)
+2020-07-14 02:05:43 [INFO ] [DirectJDKLog.java]log(173) : Starting service [Tomcat]
+2020-07-14 02:05:43 [INFO ] [DirectJDKLog.java]log(173) : Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-07-14 02:05:44 [INFO ] [DirectJDKLog.java]log(173) : At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2020-07-14 02:05:44 [INFO ] [DirectJDKLog.java]log(173) : Initializing Spring embedded WebApplicationContext
+2020-07-14 02:05:44 [INFO ] [ServletWebServerApplicationContext.java]prepareWebApplicationContext(285) : Root WebApplicationContext: initialization completed in 735 ms
+2020-07-14 02:05:44 [INFO ] [HikariDataSource.java]getConnection(110) : HikariPool-1 - Starting...
+2020-07-14 02:05:44 [INFO ] [HikariDataSource.java]getConnection(123) : HikariPool-1 - Start completed.
+2020-07-14 02:05:44 [INFO ] [H2ConsoleAutoConfiguration.java]lambda$h2Console$0(74) : H2 console available at '/h2console'. Database available at 'jdbc:h2:file:C:/hTemp/hDB'
+2020-07-14 02:05:44 [INFO ] [ExecutorConfigurationSupport.java]initialize(181) : Initializing ExecutorService 'applicationTaskExecutor'
+2020-07-14 02:05:44 [INFO ] [WelcomePageHandlerMapping.java]<init>(58) : Adding welcome page template: index
+2020-07-14 02:05:44 [INFO ] [OptionalLiveReloadServer.java]startServer(58) : LiveReload server is running on port 35729
+2020-07-14 02:05:44 [INFO ] [TomcatWebServer.java]start(220) : Tomcat started on port(s): 8080 (http) with context path ''
+2020-07-14 02:05:44 [INFO ] [StartupInfoLogger.java]logStarted(61) : Started KakaoPayTempApplication in 1.414 seconds (JVM running for 1.952)
+2020-07-14 02:06:54 [INFO ] [ExecutorConfigurationSupport.java]shutdown(218) : Shutting down ExecutorService 'applicationTaskExecutor'
+2020-07-14 02:06:54 [INFO ] [HikariDataSource.java]close(350) : HikariPool-1 - Shutdown initiated...
+2020-07-14 02:06:54 [INFO ] [HikariDataSource.java]close(352) : HikariPool-1 - Shutdown completed.
