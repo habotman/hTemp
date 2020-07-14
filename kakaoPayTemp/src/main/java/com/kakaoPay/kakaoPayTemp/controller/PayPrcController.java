@@ -3,6 +3,8 @@ package com.kakaoPay.kakaoPayTemp.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kakaoPay.kakaoPayTemp.common.ComUtil;
 import com.kakaoPay.kakaoPayTemp.service.PayPrcService;
+import com.kakaoPay.kakaoPayTemp.service.PayPrcServiceImpl;
 import com.kakaoPay.kakaoPayTemp.vo.PayPrcVo;
 
 /**
@@ -20,14 +23,15 @@ import com.kakaoPay.kakaoPayTemp.vo.PayPrcVo;
  */
 @RestController
 public class PayPrcController {
-
+	private static final Log log = LogFactory.getLog(PayPrcController.class);
+	
 	@Autowired
 	PayPrcService payPrcServiceImpl;
 
 	@RequestMapping(value = "/payment", method = RequestMethod.POST)
 	@ResponseBody
 	public String payment(@RequestBody Map<String, Object> param) {
-		System.out.println("param : " + param.toString());
+		log.debug("param : " + param.toString());
 		
 		Map<String, Object> rtnMap = new HashMap<String, Object>()  ;
 		PayPrcVo rtnVo = new PayPrcVo();
@@ -63,7 +67,7 @@ public class PayPrcController {
 	@RequestMapping(value = "/cancel", method = RequestMethod.POST)
 	@ResponseBody
 	public String cancel(@RequestBody Map<String, Object> param) {
-		System.out.println("param : " + param.toString());
+		log.debug("param : " + param.toString());
 		
 		Map<String, Object> rtnMap = new HashMap<String, Object>()  ;
 		PayPrcVo rtnVo = new PayPrcVo();
@@ -96,7 +100,7 @@ public class PayPrcController {
 	@RequestMapping(value = "/select", method = RequestMethod.POST)
 	@ResponseBody
 	public String select(@RequestBody Map<String, Object> param) {
-		System.out.println("param : " + param.toString());
+		log.debug("param : " + param.toString());
 		
 		Map<String, Object> rtnMap = new HashMap<String, Object>()  ;
 		PayPrcVo rtnVo = new PayPrcVo();
@@ -141,11 +145,11 @@ public class PayPrcController {
 //            values = request.getParameterValues(key);
 //            if (values != null) {
 //            	paramMap.put(key, (values.length > 1) ? values : values[0]);
-//            	System.out.println("["+key+"] : "+((values.length > 1) ? values : values[0])+"");
+//            	log.debug("["+key+"] : "+((values.length > 1) ? values : values[0])+"");
 //            }
 //        }
 //
-//		System.out.println("getParameterMap : " + ComUtil.convertToJsonString(paramMap));
+//		log.debug("getParameterMap : " + ComUtil.convertToJsonString(paramMap));
 //        return paramMap;
 //	}
 	
@@ -162,8 +166,8 @@ public class PayPrcController {
 //		
 //		String card1 = (String) prmMap.get("card1");
 //		String encCard1 = Cipher.encrypt(card1);
-//		System.out.println("encrypt card1 : " + encCard1);
-//		System.out.println("decrypt card1 : " + Cipher.decrypt(encCard1));
+//		log.debug("encrypt card1 : " + encCard1);
+//		log.debug("decrypt card1 : " + Cipher.decrypt(encCard1));
 //		
 //		
 //		Map<String, Object> hm = new HashMap<>();
@@ -182,7 +186,7 @@ public class PayPrcController {
 //	@RequestMapping(value = "/reqCacel")
 //	public @ResponseBody Map<String, Object> requestCancel(HttpServletRequest req) {
 //		Map<?, ?> prmMap = req.getParameterMap();
-//		System.out.println("getParameterMap : " + ComUtil.convertToJsonString(prmMap));
+//		log.debug("getParameterMap : " + ComUtil.convertToJsonString(prmMap));
 //		 
 //		Map<String, Object> hm = new HashMap<>();
 //		hm.put("store_id", "9000");

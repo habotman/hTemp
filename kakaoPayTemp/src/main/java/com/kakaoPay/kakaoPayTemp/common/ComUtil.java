@@ -8,11 +8,15 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kakaoPay.kakaoPayTemp.controller.PayPrcController;
 
 public class ComUtil {
 
+	private static final Log log = LogFactory.getLog(ComUtil.class);
 	private static ObjectMapper objMapper = new ObjectMapper();
 
 	private static ComMessage comMessage = new ComMessage();
@@ -40,7 +44,7 @@ public class ComUtil {
 		try {
 			jsonString = objMapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
 		} catch (Exception e) {
-			System.err.println(e);
+			log.error(e);
 		}
 		
 		return jsonString;
@@ -57,7 +61,7 @@ public class ComUtil {
 			convertedMap = objMapper.readValue(strJson, Map.class);
  
 		} catch (Exception e) {
-			System.err.println(e);
+			log.error(e);
 		}
 		
 		return convertedMap;
@@ -74,7 +78,7 @@ public class ComUtil {
 			convertedObj = objMapper.readValue(strJson, valueType);
  
 		} catch (Exception e) {
-			System.err.println(e);
+			log.error(e);
 		}
 		
 		return convertedObj;
@@ -98,7 +102,7 @@ public class ComUtil {
 					Method[] methods = objClass.getClass().getDeclaredMethods();
 					for(int i=0;i<=methods.length-1;i++){
 						if(methodString.equals(methods[i].getName())){
-							System.out.println("invoke : "+methodString);
+							//log.debug("invoke : "+methodString);
 							methods[i].invoke(objClass, map.get(keyAttribute));
 						}
 					}

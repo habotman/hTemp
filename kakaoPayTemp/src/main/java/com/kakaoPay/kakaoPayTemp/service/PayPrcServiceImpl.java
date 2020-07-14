@@ -3,6 +3,8 @@ package com.kakaoPay.kakaoPayTemp.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,16 +13,19 @@ import com.kakaoPay.kakaoPayTemp.common.ComUtil;
 import com.kakaoPay.kakaoPayTemp.dao.PayPrcDao;
 import com.kakaoPay.kakaoPayTemp.vo.PayPrcVo;
 
+ 
 @Service
 public class PayPrcServiceImpl implements PayPrcService {
+
+	private static final Log log = LogFactory.getLog(PayPrcServiceImpl.class);
+	
 	@Autowired
 	PayPrcDao payPrcDao;
 	
 	@Override
 	public PayPrcVo funcPayment(PayPrcVo inPayPrcVo) throws Exception {
 		
-		
-		System.out.println("@Service : funcPayment start ================");
+		log.debug("@Service : funcPayment start ================");
 		
 		/* 1.기본 정보 체크 
 			카드번호(10 ~ 16자리 숫자)
@@ -74,14 +79,14 @@ public class PayPrcServiceImpl implements PayPrcService {
 		
 		
 		String tlmCrno = payPrcDao.insertPayment(inVo);
-		System.out.println("tlmCrno ::>" + tlmCrno);
+		log.debug("tlmCrno ::>" + tlmCrno);
 		if(tlmCrno == null || "".equals(tlmCrno)) {
 			throw new Exception("관리번호 조회/등록 실패!!");
 		}
 		
 		//TODO : 동시처리 부분 방어. 사전 블럭킹~!
 		if("TEST".equals(inVo.getTestCd())) {
-			System.out.println("TEST : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			log.debug("TEST : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 			Thread.sleep(10000);
 		}
 		
@@ -95,7 +100,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 				.concat("|").concat(inVo.getCrdLimt())
 				.concat("|").concat(inVo.getCvc()) );
 		inVo.setEncCrdWrt(encStr);
-		System.out.println("encStr : setEncCrdWrt :" + inVo.getEncCrdWrt());
+		log.debug("encStr : setEncCrdWrt :" + inVo.getEncCrdWrt());
 		
 		//저장 성공시에 I/f : 전문통신 대체 별도 Table insert
 		//4.외부 저장 카드사 전문 성공 H2 테이블 dao
@@ -135,7 +140,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 		 * 마무리 취소 플래그로 저장처리 함.
 		 */
 
-		System.out.println("@Service : funcCancel start ================");
+		log.debug("@Service : funcCancel start ================");
 		PayPrcVo inVo = inPayPrcVo;
 		
 		inVo.setDataFlgcd  ( "CANCEL" );
@@ -168,7 +173,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 		
 		//기존정보 있는경우 처리 2.관리정보체크  , 없으면 3번으로 바로~ 고
 		int bCnt = payPrcDao.selectKpayCrdBaseMngCnt(inVo);
-		System.out.println("bCnt:" + bCnt);
+		log.debug("bCnt:" + bCnt);
 		if( bCnt < 1 ) {
 
 			//기존 정보가 있네? 여기서 방어로직을 해볼까?
@@ -241,7 +246,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 		inVo.setSteAmt( steAmt.toPlainString());
 		
 		String tlmCrno = payPrcDao.insertPayment(inVo);
-		System.out.println("tlmCrno ::>" + tlmCrno);
+		log.debug("tlmCrno ::>" + tlmCrno);
 		if(tlmCrno == null || "".equals(tlmCrno)) {
 			throw new Exception("관리번호 조회/등록 실패!!");
 		}
@@ -254,7 +259,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 				.concat("|").concat(inVo.getCrdLimt())
 				.concat("|").concat(inVo.getCvc()) );
 		inVo.setEncCrdWrt(encStr);
-		System.out.println("encStr : setEncCrdWrt :" + inVo.getEncCrdWrt());
+		log.debug("encStr : setEncCrdWrt :" + inVo.getEncCrdWrt());
 		//저장 성공시에 I/f : 전문통신 대체 별도 Table insert
 		//4.외부 저장 카드사 전문 성공 H2 테이블 dao
 		PayPrcVo inOttVo = ottSendFnc(inVo, tlmCrno);
@@ -278,7 +283,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 	@Override
 	public PayPrcVo funcSelect(PayPrcVo inPayPrcVo) throws Exception {
 
-		System.out.println("@Service : funcSelect start ================");
+		log.debug("@Service : funcSelect start ================");
 		
 		PayPrcVo inVo = inPayPrcVo;
 		
@@ -366,8 +371,8 @@ public class PayPrcServiceImpl implements PayPrcService {
 		
 		inOttVo.setDataLen(String.valueOf(lenSb));
 		
-		System.out.println("dataSb : lenSb :" + lenSb);
-		System.out.println("dataSb : :" + dataSb.toString());
+		log.debug("dataSb : lenSb :" + lenSb);
+		log.debug("dataSb : :" + dataSb.toString());
 		inOttVo.setDataDtl(dataSb.toString());
 		
 		int rtnOttCnt = payPrcDao.insertOttCrdTrmgt(inOttVo);
