@@ -59,7 +59,7 @@ org.apache.commons -server
  - http://localhost:8080/cancel (취소)  
  - http://localhost:8080/select (조회)  
 2. Multi Thread  -  Talend Cloud API Tester 2개 접속 필드값 추가 - 프로그램 로직 처리.  
-### TEST sleep millis :20000 millis after 20초대기으로 변경
+### TEST sleep millis :20000 millis after 20초 대기 후 처리로 변경.
 #####  [kakaoPayTemp/Doc/TestCase_단위_Mulit포함.xlsx](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/Doc/TestCase_단위_Mulit포함.xlsx) < 해당 파일 관련 테스트결과 내용 포함.
 
 ## 빌드 및 실행 방법 
