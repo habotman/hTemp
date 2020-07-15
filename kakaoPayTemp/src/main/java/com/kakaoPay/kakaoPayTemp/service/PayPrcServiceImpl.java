@@ -114,7 +114,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 		 */
 		PayPrcVo inOttVo = ottSendFnc(inVo, tlmCrno);
 		
-		
+
 		/* 
 		 * 최종 결제정보 이력 적재
 		 * 결제/취소 처리 정보 레코드 적재.
