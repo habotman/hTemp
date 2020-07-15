@@ -48,7 +48,7 @@ org.apache.commons -server
  *  추가정보 필드 : 작성일시
 
 ### 테이블설계 사항
-[screenshot_20171221-151714](./hTemp/kakaoPayTemp/Doc/kpayH2_DA.png)
+![table](./hTemp/kakaoPayTemp/Doc/kpayH2_DA.png)
 
 
 ### TEST CASE  
