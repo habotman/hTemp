@@ -48,7 +48,7 @@ org.apache.commons -server
  *  추가정보 필드 : 작성일시
 
 ### 테이블설계 사항
-![table](./hTemp/kakaoPayTemp/Doc/kpayH2_DA.png)
+![table](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/Doc/kpayH2_DA.png)
 
 
 ### TEST CASE  
@@ -59,7 +59,7 @@ org.apache.commons -server
  - http://localhost:8080/cancel (취소)  
  - http://localhost:8080/select (조회)  
 2. Multi Thread  -  Talend Cloud API Tester 2개 접속 필드값 추가 - 프로그램 로직 처리.  
-#####  [TestCase_단위_Mulit포함](./hTemp/kakaoPayTemp/Doc/TestCase_단위_Mulit포함.xlsx) < 해당 파일 관련 테스트결과 내용 포함.
+#####  [TestCase_단위_Mulit포함](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/Doc/TestCase_단위_Mulit포함.xlsx) < 해당 파일 관련 테스트결과 내용 포함.
 
 ### 빌드 및 실행 방법 
 ##### 스프링부트 및 이클립스 기본설치
