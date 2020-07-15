@@ -59,11 +59,11 @@ org.apache.commons -server
  - http://localhost:8080/cancel (취소)  
  - http://localhost:8080/select (조회)  
 2. Multi Thread  -  Talend Cloud API Tester 2개 접속 필드값 추가 - 프로그램 로직 처리.  
-#####  [TestCase_단위_Mulit포함](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/Doc/TestCase_단위_Mulit포함.xlsx) < 해당 파일 관련 테스트결과 내용 포함.
+#####  [kakaoPayTemp/Doc/TestCase_단위_Mulit포함.xlsx](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/Doc/TestCase_단위_Mulit포함.xlsx) < 해당 파일 관련 테스트결과 내용 포함.
 
 ### 빌드 및 실행 방법 
 ##### 스프링부트 및 이클립스 기본설치
-##### /kakaoPayTemp/H2DB/hDB.mv.db >> 해당 파일 로컬저장
+##### ![kakaoPayTemp/H2DB/hDB.mv.db](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/H2DB/hDB.mv.db)  >> 해당 파일 로컬저장
 ##### H2 DB 연결 /kakaoPayTemp/src/main/resources/application.properties  해당내용중에 
 ##### spring.datasource.url=jdbc:log4jdbc:h2:file:C:/hTemp/hDB;AUTO_SERVER=TRUE  
 ##### ==> C:/hTemp/hDB 경로설정 저장 빌드.
