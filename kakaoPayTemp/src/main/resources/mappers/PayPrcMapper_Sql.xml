@@ -9,21 +9,21 @@
 		FROM KPAY_CRD_TR_MNG
 		WHERE TLM_IF_FLG IS NOT NULL  
 		AND TLM_IF_FLG NOT IN ('C') --전문 완료 C 아닌건은 미처리된건.
-		
-		<if test='crdno != null and !crdno.equals("")'>
-		AND CRDNO = #{crdno}
-		</if> 
-		<if test='tlmCrno != null and !tlmCrno.equals("")'>
-			AND TLM_CRNO = #{tlmCrno}
-		</if> 
+		AND ( 1=1 
+			<if test='crdno != null and !crdno.equals("")'>
+			OR CRDNO = #{crdno}
+			</if> 
+			<if test='tlmCrno != null and !tlmCrno.equals("")'>
+				OR TLM_CRNO = #{tlmCrno}
+			</if> 
+		)
 			
     </select>
     
    <insert id="insertPayment" parameterType="com.kakaoPay.kakaoPayTemp.vo.PayPrcVo" >
-
-   <selectKey keyProperty="tlmCrno" resultType="java.lang.String"  order="BEFORE">
-       SELECT CONCAT( to_char(CURRENT_TIMESTAMP, 'YYYYMMDD' )  ,LPAD( to_char(EX_SEQ.nextval), '12', '0') ) 
-   </selectKey>
+	   <selectKey keyProperty="tlmCrno" resultType="java.lang.String"  order="BEFORE">
+	       SELECT CONCAT( to_char(CURRENT_TIMESTAMP, 'YYYYMMDD' )  ,LPAD( to_char(EX_SEQ.nextval), '12', '0') ) 
+	   </selectKey>
 
 	 	INSERT INTO PUBLIC.KPAY_CRD_TR_MNG (
 	        TLM_CRNO
@@ -61,7 +61,6 @@
 		    , CURRENT_TIMESTAMP   
 		    )
 
-
     </insert>
 	
     <update id="updatekpayCrdTrMng" parameterType="com.kakaoPay.kakaoPayTemp.vo.PayPrcVo" >
@@ -96,67 +95,67 @@
     </select>
 
     <select id="selectKpayCrdInfo" resultType="com.kakaoPay.kakaoPayTemp.vo.PayPrcVo">      
-        
-	SELECT  
-	    TLM_CRNO     AS  tlmCrno     
-	    ,GB_TR_MGTNO  AS  gbTrMgtno  
-	    ,TO_CHAR (WRTDT,'yyyyMMddhhmmss')  AS  wrtdt  
-	    ,REC_SEQNO    AS  recSeqno    
-	    ,DATA_FLGCD   AS  dataFlgcd   
-	    ,CRDNO        AS  crdno        
-	    ,AT_MNT       AS  atMnt       
-	    ,CRD_LIMT     AS  crdLimt     
-	    ,CVC          AS  cvc          
-	    ,TR_AMT       AS  trAmt       
-	    ,STE_AMT      AS  steAmt      
-	    ,TLM_IF_FLG   AS  tlmIfFlg   
-	    ,TLM_IF_MSG   AS  tlmIfMsg   
-	    ,ENC_CRD_WRT  AS  encCrdWrt  
-	    ,ECT_WRT             AS  ectWrt         
-    FROM (                             
-	        SELECT                                  
-	                    TLM_CRNO                             
-	            ,       GB_TR_MGTNO                          
-	            ,       WRTDT                                
-	            ,       REC_SEQNO                            
-	            ,       DATA_FLGCD                           
-	            ,       CRDNO                                
-	            ,       AT_MNT                               
-	            ,       CRD_LIMT                             
-	            ,       CVC                                  
-	            ,       TR_AMT                               
-	            ,       STE_AMT                              
-	            ,       TLM_IF_FLG                           
-	            ,       TLM_IF_MSG                           
-	            ,'' AS  ENC_CRD_WRT                    
-	            ,'' AS  ECT_WRT                               
-	            ,'2' AS SORT_IDX                      
-	        FROM PUBLIC.KPAY_CRD_TR_MNG             
-	        WHERE TLM_CRNO = #{tlmCrno, jdbcType=VARCHAR}
-	    UNION                                     
-	        SELECT                                  
-	                   TLM_CRNO                             
-	            ,       GB_TR_MGTNO                          
-	            ,       WRTDT                                
-	            ,       REC_SEQNO                            
-	            ,       DATA_FLGCD                           
-	            ,       CRDNO                                
-	            ,       AT_MNT                               
-	            ,       CRD_LIMT                             
-	            ,       CVC                                  
-	            ,       TR_AMT                               
-	            ,       STE_AMT                              
-	            ,'' AS  TLM_IF_FLG                     
-	            ,'' AS  TLM_IF_MSG                     
-	            ,       ENC_CRD_WRT                          
-	            ,       ECT_WRT                                     
-	            ,'1' AS SORT_IDX                      
-	        FROM PUBLIC.KPAY_CRD_BASE_MNG           
-	        WHERE TLM_CRNO = #{tlmCrno, jdbcType=VARCHAR}
-    )                                         
-    ORDER BY SORT_IDX                         
-    limit 1                                   
-        
+		        
+			SELECT  
+			    TLM_CRNO     AS  tlmCrno     
+			    ,GB_TR_MGTNO  AS  gbTrMgtno  
+			    ,TO_CHAR (WRTDT,'yyyy-MM-dd hh:mm:ss')  AS  wrtdt  
+			    ,REC_SEQNO    AS  recSeqno    
+			    ,DATA_FLGCD   AS  dataFlgcd   
+			    ,CRDNO        AS  crdno        
+			    ,AT_MNT       AS  atMnt       
+			    ,CRD_LIMT     AS  crdLimt     
+			    ,CVC          AS  cvc          
+			    ,TR_AMT       AS  trAmt       
+			    ,STE_AMT      AS  steAmt      
+			    ,TLM_IF_FLG   AS  tlmIfFlg   
+			    ,TLM_IF_MSG   AS  tlmIfMsg   
+			    ,ENC_CRD_WRT  AS  encCrdWrt  
+			    ,ECT_WRT             AS  ectWrt         
+		    FROM (                             
+			        SELECT                                  
+			                    TLM_CRNO                             
+			            ,       GB_TR_MGTNO                          
+			            ,       WRTDT                                
+			            ,       REC_SEQNO                            
+			            ,       DATA_FLGCD                           
+			            ,       CRDNO                                
+			            ,       AT_MNT                               
+			            ,       CRD_LIMT                             
+			            ,       CVC                                  
+			            ,       TR_AMT                               
+			            ,       STE_AMT                              
+			            ,       TLM_IF_FLG                           
+			            ,       TLM_IF_MSG                           
+			            ,'' AS  ENC_CRD_WRT                    
+			            ,'' AS  ECT_WRT                               
+			            ,'2' AS SORT_IDX                      
+			        FROM PUBLIC.KPAY_CRD_TR_MNG             
+			        WHERE TLM_CRNO = #{tlmCrno, jdbcType=VARCHAR}
+			    UNION                                     
+			        SELECT                                  
+			                   TLM_CRNO                             
+			            ,       GB_TR_MGTNO                          
+			            ,       WRTDT                                
+			            ,       REC_SEQNO                            
+			            ,       DATA_FLGCD                           
+			            ,       CRDNO                                
+			            ,       AT_MNT                               
+			            ,       CRD_LIMT                             
+			            ,       CVC                                  
+			            ,       TR_AMT                               
+			            ,       STE_AMT                              
+			            ,'' AS  TLM_IF_FLG                     
+			            ,'' AS  TLM_IF_MSG                     
+			            ,       ENC_CRD_WRT                          
+			            ,       ECT_WRT                                     
+			            ,'1' AS SORT_IDX                      
+			        FROM PUBLIC.KPAY_CRD_BASE_MNG           
+			        WHERE TLM_CRNO = #{tlmCrno, jdbcType=VARCHAR}
+		    )                                         
+		    ORDER BY SORT_IDX                         
+		    limit 1                                   
+		        
     </select>
 
     <insert id="insertKpayCrdBaseMng" parameterType="com.kakaoPay.kakaoPayTemp.vo.PayPrcVo" >
@@ -195,10 +194,9 @@
              , CURRENT_TIMESTAMP   
              , 'H'
              , CURRENT_TIMESTAMP      
-             )
+        )
 
     </insert>
-
 
     <insert id="insertOttCrdTrmgt" parameterType="com.kakaoPay.kakaoPayTemp.vo.PayPrcVo">
 		
@@ -220,8 +218,7 @@
              , CURRENT_TIMESTAMP   
              , 'H'
              , CURRENT_TIMESTAMP      
-           )
-
+        )
 	
     </insert>
 	

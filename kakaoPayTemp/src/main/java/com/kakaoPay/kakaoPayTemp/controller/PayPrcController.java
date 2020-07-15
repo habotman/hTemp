@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kakaoPay.kakaoPayTemp.common.ComUtil;
 import com.kakaoPay.kakaoPayTemp.service.PayPrcService;
-import com.kakaoPay.kakaoPayTemp.service.PayPrcServiceImpl;
 import com.kakaoPay.kakaoPayTemp.vo.PayPrcVo;
 
 /**
@@ -27,38 +26,45 @@ public class PayPrcController {
 	
 	@Autowired
 	PayPrcService payPrcServiceImpl;
-
+	
 	@RequestMapping(value = "/payment", method = RequestMethod.POST)
 	@ResponseBody
 	public String payment(@RequestBody Map<String, Object> param) {
+		
+		log.debug("@RestController : payment Start ================");
 		log.debug("param : " + param.toString());
 		
 		Map<String, Object> rtnMap = new HashMap<String, Object>()  ;
 		PayPrcVo rtnVo = new PayPrcVo();
 		try {
 			
-			/*
+			/**
+				required
 				카드번호(10 ~ 16자리 숫자)
 				유효기간(4자리 숫자, mmyy)
 				cvc(3자리 숫자)
 				할부개월수 : 0(일시불), 1 ~ 12
 				결제금액(100원 이상, 10억원 이하, 숫자)
-			*/
-			//json -> map -> vo
-			//결제
+				optional
+				부가가치세 
+			 */
 			
 			PayPrcVo inPayPrcVo = new PayPrcVo();
 			inPayPrcVo = (PayPrcVo) ComUtil.convertMapToObject(param, inPayPrcVo);
 			rtnVo = payPrcServiceImpl.funcPayment(inPayPrcVo);
-			rtnMap.put("status", "success");
-			rtnMap.put("message", "success");
+			rtnMap.put("status", "SUCC");
+			rtnMap.put("message", ComUtil.getMessage("SUCC"));
 			rtnMap.put("data", ComUtil.convertObjectToMap(rtnVo));
 			
 		} catch (Exception e) {
-			rtnMap.put("status", "Exception");
-			rtnMap.put("message", e.getMessage());
+			rtnMap.put("status", "FAILE");
+			rtnMap.put("message", ComUtil.getMessage("FAILE"));
+			rtnMap.put("data", e.getMessage());
 			e.printStackTrace();
 		}
+		
+		log.debug("rtnMap : " + ComUtil.convertToJsonString(rtnMap).toString());
+		log.debug("@RestController : payment end ================");
 		
 		return ComUtil.convertToJsonString(rtnMap);
 		
@@ -67,31 +73,39 @@ public class PayPrcController {
 	@RequestMapping(value = "/cancel", method = RequestMethod.POST)
 	@ResponseBody
 	public String cancel(@RequestBody Map<String, Object> param) {
+		log.debug("@RestController : cancel Start ================");
 		log.debug("param : " + param.toString());
 		
 		Map<String, Object> rtnMap = new HashMap<String, Object>()  ;
 		PayPrcVo rtnVo = new PayPrcVo();
 		try {
 			
-			/*
+			/**
+				required
 				관리번호(unique id, 20자리)
 				취소금액
-			*/
+				optional
+				부가가치세
+			 */
 			
 			//취소
 			PayPrcVo inPayPrcVo = new PayPrcVo();
 			inPayPrcVo = (PayPrcVo) ComUtil.convertMapToObject(param, inPayPrcVo);
 			rtnVo = payPrcServiceImpl.funcCancel(inPayPrcVo);
 			
-			rtnMap.put("status", "success");
-			rtnMap.put("message", "success");
+			rtnMap.put("status", "SUCC");
+			rtnMap.put("message", ComUtil.getMessage("SUCC"));
 			rtnMap.put("data", ComUtil.convertObjectToMap(rtnVo));
 			
 		} catch (Exception e) {
-			rtnMap.put("status", "Exception");
-			rtnMap.put("message", e.getMessage());
+			rtnMap.put("status", "FAILE");
+			rtnMap.put("message", ComUtil.getMessage("FAILE"));
+			rtnMap.put("data", e.getMessage());
 			e.printStackTrace();
 		}
+		
+		log.debug("rtnMap : " + ComUtil.convertToJsonString(rtnMap).toString());
+		log.debug("@RestController : cancel end ================");
 		
 		return ComUtil.convertToJsonString(rtnMap);
 		
@@ -100,12 +114,15 @@ public class PayPrcController {
 	@RequestMapping(value = "/select", method = RequestMethod.POST)
 	@ResponseBody
 	public String select(@RequestBody Map<String, Object> param) {
+		log.debug("@RestController : select Start ================");
 		log.debug("param : " + param.toString());
 		
 		Map<String, Object> rtnMap = new HashMap<String, Object>()  ;
 		PayPrcVo rtnVo = new PayPrcVo();
 		try {
-			/*
+			
+			/**
+				required
 				관리번호(unique id, 20자리)
 			 */
 			
@@ -114,85 +131,22 @@ public class PayPrcController {
 			inPayPrcVo = (PayPrcVo) ComUtil.convertMapToObject(param, inPayPrcVo);
 			rtnVo = payPrcServiceImpl.funcSelect(inPayPrcVo);
 			
-			
-			rtnMap.put("status", "success");
-			rtnMap.put("message", "success");
+			rtnMap.put("status", "SUCC");
+			rtnMap.put("message", ComUtil.getMessage("SUCC"));
 			rtnMap.put("data", ComUtil.convertObjectToMap(rtnVo));
 			
 		} catch (Exception e) {
-			rtnMap.put("status", "Exception");
-			rtnMap.put("message", e.getMessage());
+			rtnMap.put("status", "FAILE");
+			rtnMap.put("message", ComUtil.getMessage("FAILE"));
+			rtnMap.put("data", e.getMessage());
 			e.printStackTrace();
 		}
+		
+		log.debug("rtnMap : " + ComUtil.convertToJsonString(rtnMap).toString());
+		log.debug("@RestController : select end ================");
 		
 		return ComUtil.convertToJsonString(rtnMap);
 		
 	}
-
-//	/**
-//	 * Parameter
-//	 * - HttpServletRequest에서 Parameter를 꺼내 Map형태로 변경
-//	 * @param request
-//	 * @return
-//	 */
-//	private Map<String, Object> buildParameters(HttpServletRequest request) {
-//		Enumeration<?> enumeration = request.getParameterNames();      
-//		Map<String, Object> paramMap = new HashMap<String, Object>();
-//        String key = null;
-//        String[] values = null;
-//        while (enumeration.hasMoreElements()) {
-//            key = (String) enumeration.nextElement();
-//            values = request.getParameterValues(key);
-//            if (values != null) {
-//            	paramMap.put(key, (values.length > 1) ? values : values[0]);
-//            	log.debug("["+key+"] : "+((values.length > 1) ? values : values[0])+"");
-//            }
-//        }
-//
-//		log.debug("getParameterMap : " + ComUtil.convertToJsonString(paramMap));
-//        return paramMap;
-//	}
 	
-	
-//
-//	/**
-//	 * Async 카드결제 요청
-//	 * @param code
-//	 * @return
-//	 */
-//	@RequestMapping(value = "/reqSettlement")
-//	public @ResponseBody Map<String, Object> requestSettlement(HttpServletRequest req) {
-//		Map<?, ?> prmMap = buildParameters(req);
-//		
-//		String card1 = (String) prmMap.get("card1");
-//		String encCard1 = Cipher.encrypt(card1);
-//		log.debug("encrypt card1 : " + encCard1);
-//		log.debug("decrypt card1 : " + Cipher.decrypt(encCard1));
-//		
-//		
-//		Map<String, Object> hm = new HashMap<>();
-//		hm.put("store_id", "9000");
-//		hm.put("RTN_CD"  , "SUCC"); 
-//		return hm;
-//	
-//	}
-//	
-//	
-//	/**
-//	 * 결제 취소 -진행중
-//	 * @param code
-//	 * @return
-//	 */
-//	@RequestMapping(value = "/reqCacel")
-//	public @ResponseBody Map<String, Object> requestCancel(HttpServletRequest req) {
-//		Map<?, ?> prmMap = req.getParameterMap();
-//		log.debug("getParameterMap : " + ComUtil.convertToJsonString(prmMap));
-//		 
-//		Map<String, Object> hm = new HashMap<>();
-//		hm.put("store_id", "9000");
-//
-//		hm.put("RTN_CD", "SUCC"); 
-//		return hm;
-//	
-//	}
 }

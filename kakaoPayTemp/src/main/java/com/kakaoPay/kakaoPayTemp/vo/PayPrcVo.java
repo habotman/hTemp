@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 public class PayPrcVo {
 	
 	
-	String tlmCrno ; 	 //	전문발생번호
+	String tlmCrno ; 	 //관리번호
 	String wrtdt ; 	 //	작성일자
 	String recSeqno ;	 //	레코드순번
 	String dataLen ;	 //	데이터길이
-	String dataFlgcd ;	 //	데이터구분
+	String dataFlgcd ;	 //	결제/취소구분 -데이터구분: PAYMENT/CANCEL
 	String crdno ;	 //	카드번호
 	String atMnt ;	 //	할부개월
 	String crdLimt ;	 //	카드번호유효기간
@@ -27,8 +27,8 @@ public class PayPrcVo {
 	
 	String dataDtl ; //	데이터내용
 	
-	String tlmIfFlg ; // 전문 상태 코드 : R:준비, C:성공, F:실패 
-	String tlmIfMsg ; // 전문 처리 메세지
+	String tlmIfFlg ; // 거래관리상태구분 : I:입력(내부관리상태), C:성공, F:실패 
+	String tlmIfMsg ; // 관리정보 (비고) 메세지
 	
 	String atrAmt ; //총결제금액
 	String asteAmt; //총부가가치세금액

@@ -12,15 +12,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kakaoPay.kakaoPayTemp.controller.PayPrcController;
 
 public class ComUtil {
-
+	
 	private static final Log log = LogFactory.getLog(ComUtil.class);
 	private static ObjectMapper objMapper = new ObjectMapper();
-
+	
 	private static ComMessage comMessage = new ComMessage();
- 
+	
 	public ComUtil() {
 		
 	}
@@ -30,10 +29,10 @@ public class ComUtil {
 	 * @param errCd
 	 * @return
 	 */
-	public static String getMessage(String errCd) {
-		return (String)comMessage.getMessage(errCd);
+	public static String getMessage(String msgCd) {
+		return (String)comMessage.getMessage(msgCd);
 	}
-
+	
 	/**
 	 * Convert Object to JSON Formatted String
 	 * @param obj
@@ -49,7 +48,7 @@ public class ComUtil {
 		
 		return jsonString;
 	}
-
+	
 	/**
 	 * Convert JSON String to Map
 	 * @param strJson
@@ -59,7 +58,7 @@ public class ComUtil {
 		Map<String, Object> convertedMap = null;
 		try {
 			convertedMap = objMapper.readValue(strJson, Map.class);
- 
+			
 		} catch (Exception e) {
 			log.error(e);
 		}
@@ -76,7 +75,7 @@ public class ComUtil {
 		Object convertedObj = null;
 		try {
 			convertedObj = objMapper.readValue(strJson, valueType);
- 
+			
 		} catch (Exception e) {
 			log.error(e);
 		}
@@ -85,64 +84,64 @@ public class ComUtil {
 	}
 	
 	/**
-	* Map을 Vo로 변환
-	* @param map
-	* @param obj
-	* @return
-	*/
-		public static Object convertMapToObject(Map<?, ?> map, Object objClass){
-			String keyAttribute = null;
-			String setMethodString = "set";
-			String methodString = null;
-			Iterator<?> itr = map.keySet().iterator();
-			while(itr.hasNext()){
-				keyAttribute = (String) itr.next();
-				methodString = setMethodString+keyAttribute.substring(0,1).toUpperCase()+keyAttribute.substring(1);
-				try {
-					Method[] methods = objClass.getClass().getDeclaredMethods();
-					for(int i=0;i<=methods.length-1;i++){
-						if(methodString.equals(methods[i].getName())){
-							//log.debug("invoke : "+methodString);
-							methods[i].invoke(objClass, map.get(keyAttribute));
-						}
+	 * Map을 Vo로 변환
+	 * @param map
+	 * @param objClass
+	 * @return
+	 */
+	public static Object convertMapToObject(Map<?, ?> map, Object objClass){
+		String keyAttribute = null;
+		String setMethodString = "set";
+		String methodString = null;
+		Iterator<?> itr = map.keySet().iterator();
+		while(itr.hasNext()){
+			keyAttribute = (String) itr.next();
+			methodString = setMethodString+keyAttribute.substring(0,1).toUpperCase()+keyAttribute.substring(1);
+			try {
+				Method[] methods = objClass.getClass().getDeclaredMethods();
+				for(int i=0;i<=methods.length-1;i++){
+					if(methodString.equals(methods[i].getName())){
+						//log.debug("invoke : "+methodString);
+						methods[i].invoke(objClass, map.get(keyAttribute));
 					}
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
 				}
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
-			return objClass;
 		}
-
-
+		return objClass;
+	}
+	
+	
 	
 	/**
-	* Vo를 Map으로 변환
-	* @param obj
-	* @return
-	*/
+	 * Vo를 Map으로 변환
+	 * @param obj
+	 * @return
+	 */
 	public static Map<String, Object> convertObjectToMap(Object obj){
-	    Map<String, Object> map = new HashMap<String, Object>();
-	    Field[] fields = obj.getClass().getDeclaredFields();
-	    for(int i=0; i <fields.length; i++){
-	        fields[i].setAccessible(true);
-	        try{
-	        	if(fields[i].get(obj) != null && !"".equals(fields[i].get(obj))) {
-	        		map.put(fields[i].getName(), fields[i].get(obj));
-	        	}
-	        }catch(Exception e){
-	            e.printStackTrace();
-	        }
-	    }
-	    return map;
+		Map<String, Object> map = new HashMap<String, Object>();
+		Field[] fields = obj.getClass().getDeclaredFields();
+		for(int i=0; i <fields.length; i++){
+			fields[i].setAccessible(true);
+			try{
+				if(fields[i].get(obj) != null && !"".equals(fields[i].get(obj))) {
+					map.put(fields[i].getName(), fields[i].get(obj));
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		return map;
 	}
-
-
+	
+	
 	/**
 	 * 문자열 Left Padding처리
 	 * @param inStr
