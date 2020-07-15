@@ -26,12 +26,12 @@ public class PayPrcServiceImpl implements PayPrcService {
 	public PayPrcVo funcPayment(PayPrcVo inPayPrcVo) throws Exception {
 		
 		/**
-		 * 결제 처리 서비스 PAYMENT
-		 * 1. 결제 정보 정합성 체크 -중복 진입, 미처리, 관리사항 체크 DB 조회
-		 * 2. 입력값 검증 정제 -결제금액, 부가세처리
-		 * 3. 관리테이블 정보 적재 - 관리번호 채번
-		 * 4. 카드사 전송 처리 -H2 DB 적제 성공가정 - 관리정보  관리 상태 코드 : I:입력(내부관리상태), C:성공, F:실패  - 수정처리
-		 * 5. 결제/취소 정보 테이블 Row 단위 적재 처리.
+		 결제 처리 서비스 PAYMENT
+			결제 정보 정합성 체크 -중복 진입, 미처리, 관리사항 체크 DB 조회
+			입력 값 검증 정제 -결제금액, 부가세처리
+			관리테이블 정보 적재 - 관리번호 채번
+			카드사 전송 처리 -H2 DB 적재성공 가정 - 관리정보 관리 상태 코드 : I:입력(내부관리상태), C:성공, F:실패 - 수정처리
+			결제/취소 정보 테이블 Row 단위 적재 처리.
 		 */
 
 		log.debug("@Service : funcPayment start ================");
@@ -90,8 +90,8 @@ public class PayPrcServiceImpl implements PayPrcService {
 		//testCd : TEST 인 경우 break
 		if("TEST".equals(inVo.getTestCd())) {
 			log.debug("TEST sleep millis : ############################## BREAK   ############################## ");
-			log.debug("TEST sleep millis :100000 millis after ########################");
-			Thread.sleep(100000);
+			log.debug("TEST sleep millis :20000 millis after ########################");
+			Thread.sleep(20000);
 			log.debug("TEST sleep millis :########## start ########################");
 			
 		}
@@ -139,12 +139,12 @@ public class PayPrcServiceImpl implements PayPrcService {
 	public PayPrcVo funcCancel(PayPrcVo inPayPrcVo) throws Exception {
 
 		/**
-		 * 취소 처리 서비스 CANCEL
-		 * 1. 결제 정보 정합성 체크 -중복 진입, 미처리, 관리사항 체크 DB 조회
-		 * 2. 입력값 검증 정제 -거래번호의 결제정보, 결제금액, 부가세처리 대상 취소요건 처리
-		 * 3. 관리테이블 정보 적재 - 관리번호 채번
-		 * 4. 카드사 전송 처리 -H2 DB 적제 성공가정 - 관리정보  관리 상태 코드 : I:입력(내부관리상태), C:성공, F:실패  - 수정처리
-		 * 5. 결제/취소 정보 테이블 Row 단위 적재 처리.
+		 취소 처리 서비스 CANCEL
+			결제 정보 정합성 체크 -중복 진입, 미처리, 관리사항 체크 DB 조회
+			입력 값 검증 정제 -거래번호의 결제정보, 결제금액, 부가세처리 대상 취소요건 처리
+			관리테이블 정보 적재 - 관리번호 채번
+			카드사 전송 처리 -H2 DB 적재성공가정 - 관리정보 관리 상태 코드 : I:입력(내부관리상태), C:성공, F:실패 - 수정처리
+			결제/취소 정보 테이블 Row 단위 적재 처리.
 		 */
 		
 		log.debug("@Service : funcCancel start ================");
@@ -253,8 +253,8 @@ public class PayPrcServiceImpl implements PayPrcService {
 		//testCd : TEST 인 경우 break
 		if("TEST".equals(inVo.getTestCd())) {
 			log.debug("TEST sleep millis : ############################## BREAK   ############################## ");
-			log.debug("TEST sleep millis :100000 millis after ########################");
-			Thread.sleep(100000);
+			log.debug("TEST sleep millis :20000 millis after ########################");
+			Thread.sleep(20000);
 			log.debug("TEST sleep millis :########## start ########################");
 			
 		}
@@ -296,12 +296,12 @@ public class PayPrcServiceImpl implements PayPrcService {
 	public PayPrcVo funcSelect(PayPrcVo inPayPrcVo) throws Exception {
 
 		/** 
-		 * 조회 처리 서비스 - DB에 저장된 데이터를 조회
-		 * 1. 입력값 검증 - 관리번호 null check
-		 * 2. 결제정보테이블 대상 조회.
-		 * 3. out data 정제처리,  과제요건 - 카드정보 복호화처리 포함.
-		 *  dataFlgcd - 결제취소구분 - PAYMENT/CANCEL
-		 *  추가정보 필드 : 작성일시
+		 조회 처리 서비스 - DB에 저장된 데이터를 조회
+			입력 값 검증 - 관리번호 null check
+			결제정보테이블 대상 조회.
+			out data 정제처리, 과제요건 - 카드정보 복호화 처리 포함.
+			dataFlgcd - 결제취소구분 - PAYMENT/CANCEL
+			추가정보 필드 : 작성일시
 		 */
 		
 		log.debug("@Service : funcSelect start ================");
