@@ -47,7 +47,7 @@ org.apache.commons -server
  *  dataFlgcd - 결제취소구분 - PAYMENT/CANCEL
  *  추가정보 필드 : 작성일시
 
-### 테이블설계 사항
+### 테이블 사항
 ![table](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/Doc/kpayH2_DA.png)
 
 
@@ -61,12 +61,15 @@ org.apache.commons -server
 2. Multi Thread  -  Talend Cloud API Tester 2개 접속 필드값 추가 - 프로그램 로직 처리.  
 #####  [kakaoPayTemp/Doc/TestCase_단위_Mulit포함.xlsx](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/Doc/TestCase_단위_Mulit포함.xlsx) < 해당 파일 관련 테스트결과 내용 포함.
 
-### 빌드 및 실행 방법 
+## 빌드 및 실행 방법 
 ##### 스프링부트 및 이클립스 기본설치
 ##### ![kakaoPayTemp/H2DB/hDB.mv.db](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/H2DB/hDB.mv.db)  >> 해당 파일 로컬저장
 ##### H2 DB 연결 /kakaoPayTemp/src/main/resources/application.properties  해당내용중에 
 ##### spring.datasource.url=jdbc:log4jdbc:h2:file:C:/hTemp/hDB;AUTO_SERVER=TRUE  
-##### ==> C:/hTemp/hDB 경로설정 저장 빌드.
+##### ==> C:/hTemp/hDB 파일경로설정 > 저장 빌드 >
+##### Spring boot start : eclipse 메뉴 > Run>RunAs>Spring Boot App 실행
+##### 이후 Talend Cloud API Tester - Google 플러그인 API POST Call
+
  
 
 
