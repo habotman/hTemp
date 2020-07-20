@@ -11,10 +11,10 @@
 		AND TLM_IF_FLG NOT IN ('C') --전문 완료 C 아닌건은 미처리된건.
 		AND ( 1=1 
 			<if test='crdno != null and !crdno.equals("")'>
-			OR CRDNO = #{crdno}
+			and  CRDNO = #{crdno}
 			</if> 
 			<if test='tlmCrno != null and !tlmCrno.equals("")'>
-				OR TLM_CRNO = #{tlmCrno}
+				and  TLM_CRNO = #{tlmCrno}
 			</if> 
 		)
 			
