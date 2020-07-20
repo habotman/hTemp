@@ -31,7 +31,7 @@
         </layout>
     </appender>
      
-    <!-- 모든 로그 출력 (파일/콘솔) -->
+    <!-- 모든 로그 출력 (파일/콘솔) DEBUG -->
     <root level="DEBUG">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
