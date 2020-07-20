@@ -44,24 +44,39 @@ public class PayPrcServiceImpl implements PayPrcService {
 		
 		/*
 		 * 정합성 체크 
+		 * 결제 카드정보 필수 체크
+		 * 입력받은 결제금액, 부가세 검증 정제 처리 
+		 * 부가세 부분 과제요건 내용적용 
+		 */
+		
+		if(inVo.getCrdno() == null || "".equals(inVo.getCrdno())) {
+			throw new Exception("crdno is null : 카드번호 없음.");
+		}
+		if(inVo.getAtMnt() == null || "".equals(inVo.getAtMnt())) {
+			throw new Exception("atMnt is null : 할부개월 없음.");
+		}
+		if(inVo.getCrdLimt() == null || "".equals(inVo.getCrdLimt())) {
+			throw new Exception("crdLimt is null : 유효기간 없음.");
+		}
+		if(inVo.getCvc() == null || "".equals(inVo.getCvc())) {
+			throw new Exception("cvc is null : CVC코드 없음.");
+		}
+		if(inVo.getTrAmt() == null || "".equals(inVo.getTrAmt())) {
+			throw new Exception("trAmt is null : 거래금액 없음.");
+		}
+		 
+		/* 
 		 * 기존정보 카드번호 or 관리번호 체크 관리정보 상태  C : 완료상태 이외는 체크
 		 * 방어로직 구현 : 해당 처리가 되어지지 않은건은 시스템 처리 중으로 간주 진행 되지 않게.
 		 * TO-DO : 관리상태상의 break 사항 구현사항
-		 * 
-		 *  ex :testCd : TEST 인 경우  아래 sleep break, 추가 진입시에 체크
-		 */
+		 * ex :testCd : TEST 인 경우  아래 sleep break, 추가 진입시에 체크
+		*/
 		int rtnCnt = payPrcDao.selectPayCnt(inVo);
 		if( rtnCnt > 0 ) {
 			throw new Exception("해당 카드번호에 [I/F 관리체크] 미처리된 건이 존재합니다.(TEST CASE) - 해당 카드번호 미결처리건 해소후 정상가능.");
 		}
 		
-		/*
-		 * 입력받은 결제금액, 부가세 검증 정제 처리 
-		 * 부가세 부분 과제요건 내용적용 
-		 */
-		if(inVo.getTrAmt() == null || "".equals(inVo.getTrAmt())) {
-			throw new Exception("거래금액 없음.");
-		}
+		
 		BigDecimal steAmt = BigDecimal.ZERO;
 		BigDecimal trAmt = new BigDecimal(inVo.getTrAmt());
 		if(inVo.getSteAmt() != null && !"".equals(inVo.getSteAmt())) {
@@ -158,12 +173,23 @@ public class PayPrcServiceImpl implements PayPrcService {
 		
 		/*
 		 * 정합성 체크 
+		 * 취소 카드정보 필수 체크
+		 * 입력받은 결제금액, 부가세 검증 정제 처리 
+		 * 부가세 부분 과제요건 내용적용 
+		 */
+		if(inVo.getTlmCrno() == null || "".equals(inVo.getTlmCrno())) {
+			throw new Exception("tlmCrno is null : 관리번호 없음.");
+		}
+		if(inVo.getTrAmt() == null || "".equals(inVo.getTrAmt())) {
+			throw new Exception("trAmt is null : 거래금액 없음.");
+		}
+		
+		/* 
 		 * 기존정보 카드번호 or 관리번호 체크 관리정보 상태  C : 완료상태 이외는 체크
 		 * 방어로직 구현 : 해당 처리가 되어지지 않은건은 시스템 처리 중으로 간주 진행 되지 않게.
 		 * TO-DO : 관리상태상의 break 사항 구현사항
-		 * 
-		 *  ex :testCd : TEST 인 경우  아래 sleep break, 추가 진입시에 체크
-		 */
+		 * ex :testCd : TEST 인 경우  아래 sleep break, 추가 진입시에 체크
+		*/
 		int rtnCnt = payPrcDao.selectPayCnt(inVo);
 		if( rtnCnt > 0 ) {
 			throw new Exception("해당 카드번호에 [I/F 관리체크] 미처리된 건이 존재합니다.(TEST CASE) - 해당 카드번호 미결처리건 해소후 정상가능.");
@@ -176,14 +202,6 @@ public class PayPrcServiceImpl implements PayPrcService {
 		log.debug("bCnt:" + bCnt);
 		if( bCnt < 1 ) {
 			throw new Exception("결제내역이 없음.취소대상건 없음.");
-		}
-		
-		/*
-		 * 입력받은 결제금액, 부가세 검증 정제 처리 
-		 * 부가세 부분 과제요건 내용적용 
-		 */
-		if(inVo.getTrAmt() == null || "".equals(inVo.getTrAmt())) {
-			throw new Exception("거래금액 없음.");
 		}
 		
 		/*
@@ -254,7 +272,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 		 * 관리테이블 생성후 키 리턴 받는다/
 		 */
 		String tlmCrno = payPrcDao.insertPayment(inVo);
-		log.debug("tlmCrno ::>" + tlmCrno);
+		//log.debug("tlmCrno ::>" + tlmCrno);
 		if(tlmCrno == null || "".equals(tlmCrno)) {
 			throw new Exception("관리번호 조회/등록 실패!!");
 		}
@@ -320,10 +338,11 @@ public class PayPrcServiceImpl implements PayPrcService {
 		PayPrcVo inVo = inPayPrcVo;
 		
 		/*
-		 * 관리번호 null check
+		 * 정합성 체크 
+		 * 조회 관리번호 체크 
 		 */
 		if(inVo.getTlmCrno() == null || "".equals(inVo.getTlmCrno())) {
-			throw new Exception("TlmCrno is null : 관리번호 없음.");
+			throw new Exception("tlmCrno is null : 관리번호 없음.");
 		}
 		/*
 		 * 결제정보테이블 대상조회
