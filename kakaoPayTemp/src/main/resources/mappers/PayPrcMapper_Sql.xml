@@ -5,7 +5,7 @@
 <mapper namespace="com.kakaoPay.kakaoPayTemp.dao.PayPrcMapper">
 
 	<select id="selectPayCnt" resultType="int">
-        SELECT count(*) AS CNT
+        SELECT COUNT(*) AS CNT
 		FROM KPAY_CRD_TR_MNG
 		WHERE TLM_IF_FLG IS NOT NULL  
 		AND TLM_IF_FLG NOT IN ('C') --전문 완료 C 아닌건은 미처리된건.
@@ -13,7 +13,10 @@
 		-- 관리번호가 있으면 관리번호만. 제약을 둔다. 결제와 취소 체크 업무요건에따라 변경필요.
 		<choose>
 		   <when test='tlmCrno != null and !tlmCrno.equals("")'>
-		       AND  TLM_CRNO = #{tlmCrno}
+		       -- 관리번호 와 취소시 관리번호 체크
+		        AND (TLM_CRNO = #{tlmCrno}
+                     OR GB_TR_MGTNO = #{tlmCrno}
+                     )
 		   </when>
 		   <otherwise>
 		    -- 카드번호로만 체크
