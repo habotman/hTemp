@@ -7,7 +7,7 @@ public class ComMessage {
 	private Map<String, String> mapMessage = new HashMap<String, String>();
 	public ComMessage() {
 		mapMessage.put("SUCC", "성공");
-		mapMessage.put("FAILE", "실패");
+		mapMessage.put("FAIL", "실패");
 
 		
 		

@@ -57,8 +57,8 @@ public class PayPrcController {
 			rtnMap.put("data", ComUtil.convertObjectToMap(rtnVo));
 			
 		} catch (Exception e) {
-			rtnMap.put("status", "FAILE");
-			rtnMap.put("message", ComUtil.getMessage("FAILE"));
+			rtnMap.put("status", "FAIL");
+			rtnMap.put("message", ComUtil.getMessage("FAIL"));
 			rtnMap.put("data", e.getMessage());
 			e.printStackTrace();
 		}
@@ -98,8 +98,8 @@ public class PayPrcController {
 			rtnMap.put("data", ComUtil.convertObjectToMap(rtnVo));
 			
 		} catch (Exception e) {
-			rtnMap.put("status", "FAILE");
-			rtnMap.put("message", ComUtil.getMessage("FAILE"));
+			rtnMap.put("status", "FAIL");
+			rtnMap.put("message", ComUtil.getMessage("FAIL"));
 			rtnMap.put("data", e.getMessage());
 			e.printStackTrace();
 		}
@@ -136,8 +136,8 @@ public class PayPrcController {
 			rtnMap.put("data", ComUtil.convertObjectToMap(rtnVo));
 			
 		} catch (Exception e) {
-			rtnMap.put("status", "FAILE");
-			rtnMap.put("message", ComUtil.getMessage("FAILE"));
+			rtnMap.put("status", "FAIL");
+			rtnMap.put("message", ComUtil.getMessage("FAIL"));
 			rtnMap.put("data", e.getMessage());
 			e.printStackTrace();
 		}
