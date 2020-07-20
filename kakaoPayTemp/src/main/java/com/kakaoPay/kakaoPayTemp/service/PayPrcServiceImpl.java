@@ -76,7 +76,6 @@ public class PayPrcServiceImpl implements PayPrcService {
 			throw new Exception("해당 카드번호에 [I/F 관리체크] 미처리된 건이 존재합니다.(TEST CASE) - 해당 카드번호 미결처리건 해소후 정상가능.");
 		}
 		
-		
 		BigDecimal steAmt = BigDecimal.ZERO;
 		BigDecimal trAmt = new BigDecimal(inVo.getTrAmt());
 		if(inVo.getSteAmt() != null && !"".equals(inVo.getSteAmt())) {
