@@ -142,6 +142,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 		 취소 처리 서비스 CANCEL
 			결제 정보 정합성 체크 -중복 진입, 미처리, 관리사항 체크 DB 조회
 			입력 값 검증 정제 -거래번호의 결제정보, 결제금액, 부가세처리 대상 취소요건 처리
+			취소시 관리번호만,  해당 카드정보 결제정보테이블 조회. -추가
 			관리테이블 정보 적재 - 관리번호 채번
 			카드사 전송 처리 -H2 DB 적재성공가정 - 관리정보 관리 상태 코드 : I:입력(내부관리상태), C:성공, F:실패 - 수정처리
 			결제/취소 정보 테이블 Row 단위 적재 처리.
@@ -238,6 +239,15 @@ public class PayPrcServiceImpl implements PayPrcService {
 		//set
 		inVo.setSteAmt( steAmt.toPlainString());
 		
+		
+		/*
+		 * 취소시 관리번호만,  해당 카드정보 결제정보테이블 조회. -추가
+		 */
+		PayPrcVo infoVo = payPrcDao.selectKpayCrdInfo(inVo);
+		inVo.setCrdno(infoVo.getCrdno());
+		inVo.setCrdLimt(infoVo.getCrdLimt());
+		inVo.setCvc(infoVo.getCvc());
+		
 		/*
 		 * 관리테이블 적재 
 		 * 시퀀스 20자리 uniqre id 생성 :selectKey ( YYYYMMDD+ lad 시퀀스)
@@ -258,6 +268,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 			log.debug("TEST sleep millis :########## start ########################");
 			
 		}
+		
 		
 		/*  관리번호 unique */
 		//in set 
