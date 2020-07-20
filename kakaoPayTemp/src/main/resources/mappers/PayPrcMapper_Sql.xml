@@ -9,14 +9,18 @@
 		FROM KPAY_CRD_TR_MNG
 		WHERE TLM_IF_FLG IS NOT NULL  
 		AND TLM_IF_FLG NOT IN ('C') --전문 완료 C 아닌건은 미처리된건.
-		AND ( 1=1 
-			<if test='crdno != null and !crdno.equals("")'>
-			and  CRDNO = #{crdno}
-			</if> 
-			<if test='tlmCrno != null and !tlmCrno.equals("")'>
-				and  TLM_CRNO = #{tlmCrno}
-			</if> 
-		)
+		
+		-- 관리번호가 있으면 관리번호만. 제약을 둔다. 결제와 취소 체크 업무요건에따라 변경필요.
+		<choose>
+		   <when test='tlmCrno != null and !tlmCrno.equals("")'>
+		       AND  TLM_CRNO = #{tlmCrno}
+		   </when>
+		   <otherwise>
+		    -- 카드번호로만 체크
+              AND  CRDNO = #{crdno}
+		   </otherwise>
+		</choose>
+				
 			
     </select>
     
@@ -154,7 +158,7 @@
 			        WHERE TLM_CRNO = #{tlmCrno, jdbcType=VARCHAR}
 		    )                                         
 		    ORDER BY SORT_IDX                         
-		    limit 1                                   
+		    LIMIT 1                                   
 		        
     </select>
 
