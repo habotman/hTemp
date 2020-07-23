@@ -38,10 +38,6 @@ public class PayPrcServiceImpl implements PayPrcService {
 		
 		PayPrcVo inVo = inPayPrcVo;
 		
-		inVo.setDataFlgcd  ( "PAYMENT" ); //결제취소구분 PAYMENT/CANCEL
-		inVo.setTlmIfFlg("I"); //관리정보 상태 코드
-		inVo.setTlmIfMsg("결제신청: 결제신청 저장처리~!!!");
-		
 		/*
 		 * 정합성 체크 
 		 * 결제 카드정보 필수 체크
@@ -64,7 +60,59 @@ public class PayPrcServiceImpl implements PayPrcService {
 		if(inVo.getTrAmt() == null || "".equals(inVo.getTrAmt())) {
 			throw new Exception("trAmt is null : 거래금액 없음.");
 		}
-		 
+		
+		//결제시 입력 값 제약 추가 
+		//한꺼번에 리턴하자...
+		String exStr = "";
+		if( ComUtil.isNumeric(inVo.getCrdno()) != true 
+					|| ComUtil.isNumeric(inVo.getAtMnt()) != true 
+					|| ComUtil.isNumeric(inVo.getCrdLimt()) != true 
+					|| ComUtil.isNumeric(inVo.getCvc()) != true 
+					|| ComUtil.isNumeric(inVo.getTrAmt()) != true  ) {
+			
+			  exStr =  "숫자형으로 입력하세요. 확인사항 -> "
+					+ "Crdno : [" + inVo.getCrdno() +"]"
+					+ " AtMnt : [" + inVo.getAtMnt() +"]"
+					+ " CrdLimt : [" + inVo.getCrdLimt() +"]"
+					+ " Cvc : [" + inVo.getCvc() +"]"
+					+ " TrAmt : [" + inVo.getTrAmt() +"]";
+			throw new Exception("숫자형으로 입력하세요. 확인사항 -> " + exStr);
+		}
+
+		if(inVo.getSteAmt() != null && !"".equals(inVo.getSteAmt())){
+			if(ComUtil.isNumeric(inVo.getSteAmt()) != true) {
+				exStr =  "숫자형으로 입력하세요. 확인사항 -> "
+				  + "SteAmt : [" + inVo.getSteAmt() +"]";
+				throw new Exception("숫자형으로 입력하세요. 확인사항 -> " + exStr);
+			}
+		}
+		
+		if(inVo.getCrdno().length() < 10 || inVo.getCrdno().length() > 16) {
+			throw new Exception("카드번호(10 ~ 16자리 숫자) 제약사항");
+		}
+		if(inVo.getCrdLimt().length() != 4) {
+			throw new Exception("유효기간(4자리 숫자, mmyy) 제약사항");
+		}
+		if(inVo.getCvc().length() != 3) {
+			throw new Exception("cvc(3자리 숫자) 제약사항");
+		}
+		if( Integer.parseInt(inVo.getAtMnt())  < 0 || Integer.parseInt(inVo.getAtMnt()) > 12) {
+			throw new Exception("할부개월수 : 0(일시불), 1 ~ 12 제약사항");
+		}
+		
+		if( Double.parseDouble(inVo.getTrAmt()) < 100 ||  Double.parseDouble(inVo.getTrAmt()) > 1000000000 ) {
+			throw new Exception("결제금액(100원 이상, 10억원 이하, 숫자) 제약사항");
+		}
+		
+
+		inVo.setDataFlgcd  ( "PAYMENT" ); //결제취소구분 PAYMENT/CANCEL
+		inVo.setTlmIfFlg("I"); //관리정보 상태 코드
+		inVo.setTlmIfMsg("결제신청: 결제신청 저장처리~!!!");
+		
+		//할부개월 수 2자리 
+		String atMnt = ComUtil.leftPad(inVo.getAtMnt(), 2, "0");
+		inVo.setAtMnt(atMnt);
+		
 		/* 
 		 * 기존정보 카드번호 or 관리번호 체크 관리정보 상태  C : 완료상태 이외는 체크
 		 * 방어로직 구현 : 해당 처리가 되어지지 않은건은 시스템 처리 중으로 간주 진행 되지 않게.
@@ -114,19 +162,12 @@ public class PayPrcServiceImpl implements PayPrcService {
 		//in set
 		inVo.setTlmCrno(tlmCrno); //관리번호 채번 셋팅
 		
-		//암호화 카드정보 ex. encrypt(카드정보|유효기간|cvc)
-		String encStr = Cipher.encrypt( inVo.getCrdno()
-				.concat("|").concat(inVo.getCrdLimt())
-				.concat("|").concat(inVo.getCvc()) );
-		inVo.setEncCrdWrt(encStr);
-		log.debug("encStr : setEncCrdWrt :" + inVo.getEncCrdWrt());
-		
 		/*
 		 * 저장 성공시에 I/f : 전문통신 대체 별도 Table insert
 		 * 결제/취소 외부 저장 카드사 전문 성공 H2 테이블 대체
 		 * 관리테이블의 상태 외부전문 성공으로 완료 업데이트.
 		 */
-		PayPrcVo inOttVo = ottSendFnc(inVo, tlmCrno);
+		inVo = ottSendFnc(inVo, tlmCrno);
 		
 
 		/* 
@@ -138,8 +179,8 @@ public class PayPrcServiceImpl implements PayPrcService {
 		
 		//return 
 		PayPrcVo rtnVo = new PayPrcVo();
-		rtnVo.setTlmCrno(inOttVo.getTlmCrno());
-		rtnVo.setDataDtl(inOttVo.getDataDtl());
+		rtnVo.setTlmCrno(inVo.getTlmCrno());
+		rtnVo.setDataDtl(inVo.getDataDtl());
 		
 		log.debug("@Service : funcPayment end ================");
 		
@@ -165,11 +206,6 @@ public class PayPrcServiceImpl implements PayPrcService {
 		log.debug("@Service : funcCancel start ================");
 		PayPrcVo inVo = inPayPrcVo;
 		
-		inVo.setDataFlgcd  ( "CANCEL" );
-		inVo.setGbTrMgtno(inVo.getTlmCrno() ); //원거래관리번호
-		inVo.setTlmIfFlg("I");
-		inVo.setTlmIfMsg("취소신청: 취소신청 저장처리~!!!");
-		
 		/*
 		 * 정합성 체크 
 		 * 취소 카드정보 필수 체크
@@ -182,6 +218,40 @@ public class PayPrcServiceImpl implements PayPrcService {
 		if(inVo.getTrAmt() == null || "".equals(inVo.getTrAmt())) {
 			throw new Exception("trAmt is null : 거래금액 없음.");
 		}
+		
+		
+		//취소시 입력 값 제약 추가 
+		//한꺼번에 리턴하자...
+		String exStr = "";
+		if( ComUtil.isNumeric(inVo.getTrAmt()) != true ) {
+			
+			 exStr =  "숫자형으로 입력하세요. 확인사항 -> "
+					+ "TrAmt : [" + inVo.getTrAmt() +"]";
+			
+			throw new Exception("숫자형으로 입력하세요. 확인사항 -> " + exStr);
+		}
+		
+		if(inVo.getSteAmt() != null && !"".equals(inVo.getSteAmt())){
+			if(ComUtil.isNumeric(inVo.getSteAmt()) != true) {
+				exStr =  "숫자형으로 입력하세요. 확인사항 -> "
+				  + "SteAmt : [" + inVo.getSteAmt() +"]";
+				throw new Exception("숫자형으로 입력하세요. 확인사항 -> " + exStr);
+			}
+		}
+		
+		if( Double.parseDouble(inVo.getTrAmt()) < 100 ||  Double.parseDouble(inVo.getTrAmt()) > 1000000000 ) {
+			throw new Exception("결제금액(100원 이상, 10억원 이하, 숫자) 제약사항");
+		}
+		
+		
+
+		inVo.setDataFlgcd  ( "CANCEL" );
+		inVo.setGbTrMgtno(inVo.getTlmCrno() ); //원거래관리번호
+		inVo.setTlmIfFlg("I");
+		inVo.setTlmIfMsg("취소신청: 취소신청 저장처리~!!!");
+		
+		//할부개월 수 00 고정
+		inVo.setAtMnt("00");
 		
 		/* 
 		 * 기존정보 카드번호 or 관리번호 체크 관리정보 상태  C : 완료상태 이외는 체크
@@ -291,19 +361,13 @@ public class PayPrcServiceImpl implements PayPrcService {
 		//in set 
 		inVo.setTlmCrno(tlmCrno); //관리번호 채번 셋팅
 		
-		//암호화 카드정보 ex. encrypt(카드정보|유효기간|cvc)
-		String encStr = Cipher.encrypt( inVo.getCrdno()
-				.concat("|").concat(inVo.getCrdLimt())
-				.concat("|").concat(inVo.getCvc()) );
-		inVo.setEncCrdWrt(encStr);
-		log.debug("encStr : setEncCrdWrt :" + inVo.getEncCrdWrt());
 
 		/*
 		 * 저장 성공시에 I/f : 전문통신 대체 별도 Table insert
 		 * 결제/취소 외부 저장 카드사 전문 성공 H2 테이블 대체
 		 * 관리테이블의 상태 외부전문 성공으로 완료 업데이트.
 		 */
-		PayPrcVo inOttVo = ottSendFnc(inVo, tlmCrno);
+		inVo = ottSendFnc(inVo, tlmCrno);
 		
 		/* 
 		 * 최종 결제정보 이력 적재
@@ -312,10 +376,11 @@ public class PayPrcServiceImpl implements PayPrcService {
 		 */
 		payPrcDao.insertKpayCrdBaseMng(inVo);
 		
-		//return
+		//return 
 		PayPrcVo rtnVo = new PayPrcVo();
-		rtnVo.setTlmCrno(inOttVo.getTlmCrno());
-		rtnVo.setTrAmt(inVo.getTrAmt());
+		rtnVo.setTlmCrno(inVo.getTlmCrno());
+		rtnVo.setDataDtl(inVo.getDataDtl());
+		
 				
 		return rtnVo;
 	}
@@ -401,15 +466,20 @@ public class PayPrcServiceImpl implements PayPrcService {
 		
 		log.debug("@Service private: ottSendFnc start ================");
 		
-		PayPrcVo inOttVo = new PayPrcVo();
-		inOttVo.setTlmCrno(inVo.getTlmCrno());
-		inOttVo.setDataFlgcd(inVo.getDataFlgcd());
-
-		StringBuffer dataSb = new StringBuffer();
+		//데이터 가공
+		
+		//암호화 카드정보 ex. encrypt(카드정보|유효기간|cvc)
+		String encStr = Cipher.encrypt( inVo.getCrdno()
+				.concat("|").concat(inVo.getCrdLimt())
+				.concat("|").concat(inVo.getCvc()) );
+		inVo.setEncCrdWrt(encStr);
+		log.debug("encStr : setEncCrdWrt :" + inVo.getEncCrdWrt());
+		
 		
 		/*
 		 * 전송하는 string 데이터 를 공통헤더부문과 데이터부문을 합쳐 하나의 string(450자리)
 		 */
+		StringBuffer dataSb = new StringBuffer();
 		
 		//heder 
 		dataSb.append(ComUtil.rightPad(inVo.getDataFlgcd(), 10, "_")); //데이터구분 : 문자
@@ -418,7 +488,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 		//data
 		dataSb.append(ComUtil.rightPad(inVo.getCrdno(), 20, "_")); //카드번호  : 숫자(L)
 		dataSb.append(ComUtil.leftPad(inVo.getAtMnt(), 2, "0")); //할부개월수  : //숫자(0)
-		
+
 		//카드유효번호 월(2자리), 년도(2자리) ex) 0125 -> 2025년
 		String clStr = inVo.getCrdLimt();
 		String clStrCa = clStr.substring(2, 4).concat(clStr.substring(0, 2));
@@ -434,16 +504,16 @@ public class PayPrcServiceImpl implements PayPrcService {
 		int lenSb = dataSb.length();
 		dataSb.insert(0, ComUtil.leftPad( String.valueOf(lenSb) , 4, "_")); //데이터 길이 :숫자
 		
-		inOttVo.setDataLen(String.valueOf(lenSb));
+		inVo.setDataLen(String.valueOf(lenSb));
 		
 		log.debug("dataSb : lenSb :" + lenSb);
 		log.debug("dataSb : :" + dataSb.toString());
-		inOttVo.setDataDtl(dataSb.toString());
+		inVo.setDataDtl(dataSb.toString());
 		
 		/*
 		 *  결제요청 외부 카드사 전문 처리 H2 DB 처리. 외부 - 카드사로 전송하는 모든 요청은 성공이라고 가정
 		 */
-		int rtnOttCnt = payPrcDao.insertOttCrdTrmgt(inOttVo);
+		int rtnOttCnt = payPrcDao.insertOttCrdTrmgt(inVo);
 		
 		/*
 		 * 추가: 외부 카드사 처리가 최종이라고 가정 (성공) 이후 내부 관리정보 테이블에 상태를 수정 .
@@ -470,7 +540,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 		
 		log.debug("@Service private: ottSendFnc end ================");
 		
-		return inOttVo;
+		return inVo;
 	}
 
 

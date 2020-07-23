@@ -186,4 +186,22 @@ public class ComUtil {
 		return rtnStr;
 	}
 	
+	/**
+	 * Double 정상시 숫자 True
+	 * @param s
+	 * @return
+	 */
+	public static boolean isNumeric(String s) {
+		try {
+			if(s.indexOf(" ")>=0){
+				return false;
+			}
+			Double.parseDouble(s);
+			return true;
+		} catch(NumberFormatException e) {
+			return false;
+		}
+	}
+	
+	
 }
