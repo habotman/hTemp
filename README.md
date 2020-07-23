@@ -50,14 +50,16 @@ org.apache.commons -server
   
   
 --Add
-#### 결제시 등록처리 카드정보 필수값 체크 추가, 취소시 관리번호와 취소금액 부분 필수 추가- 관리번호로 카드정보 조회 셋팅 추가.
---Add
-#### 결제/취소 입력값 제약 추가, out 소스정비. 
+결제시 등록처리 카드정보 필수값 체크 추가, 취소시 관리번호와 취소금액 부분 필수 추가- 관리번호로 카드정보 조회 셋팅 추가.
+결제/취소 입력값 제약 추가, out 소스정비. 
   
-  
+    
+      
   
 ### 테이블 사항
 ![table](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/Doc/kpayH2_DA.png)
+
+
 
 
 ### TEST CASE  
@@ -80,3 +82,7 @@ org.apache.commons -server
 ##### Spring boot start : eclipse 메뉴 > Run>RunAs>Spring Boot App 실행
 ##### 이후 Talend Cloud API Tester - Google 플러그인 API POST Call
 
+
+  
+
+  
