@@ -433,7 +433,7 @@ public class PayPrcServiceImpl implements PayPrcService {
 		String cStr = decCrdno.substring(0, 6);
 		int len = decCrdno.length()-9;
 		String cStr1 = "";
-		for(int i=0; i<=len; i++) {
+		for(int i=0; i<len; i++) {
 			cStr1+="*";
 		}
 		String cStr2 = decCrdno.substring(decCrdno.length()-3, decCrdno.length());
