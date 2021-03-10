@@ -65,6 +65,7 @@ org.apache.commons -server
 ### TEST CASE  
 
 #### 테스트 방법 - POST 방식  
+#### HEADERS - Content-Type : application/json 
 1. test case : Talend Cloud API Tester - Google 플러그인  
  - http://localhost:8080/payment (결제)  
  - http://localhost:8080/cancel (취소)  
