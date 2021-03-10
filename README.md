@@ -3,7 +3,7 @@
 ### JAVA  
  javaSe-1.8(jre1.8.0_251)   
 1.springframework.boot version.2.3.1.RELEASE, spring-boot-maven-plugin  
- kakaoPayTemp project for Spring Boot  
+ HaPayTemp project for Spring Boot  
 2.DATABASE  
 - h2database File (mv.db)  
 
@@ -57,7 +57,7 @@ org.apache.commons -server
       
   
 ### 테이블 사항
-![table](https://github.com/habotman/hTemp/blob/master/kakaoPayTemp/Doc/kpayH2_DA.png)
+![table](https://github.com/habotman/hTemp/blob/master/HaTemp/Doc/hpayH2_DA.png)
 
 
 
