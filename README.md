@@ -3,7 +3,7 @@
 ### JAVA  
  javaSe-1.8(jre1.8.0_251)   
 1.springframework.boot version.2.3.1.RELEASE, spring-boot-maven-plugin  
- HaPayTemp project for Spring Boot  
+ HaTemp project for Spring Boot  
 2.DATABASE  
 - h2database File (mv.db)  
 
